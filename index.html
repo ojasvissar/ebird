@@ -10,13 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#EFF0E9;
-    --paper-2:#F5F5EF;
-    --ink:#15231B;
-    --ink-soft:#4B5A50;
-    --ink-faint:#7A867C;
-    --line:#D3D7C9;
-    --line-soft:#E0E3D8;
+    --paper:#EFF0E9; --paper-2:#F5F5EF;
+    --ink:#15231B; --ink-soft:#4B5A50; --ink-faint:#7A867C;
+    --line:#D3D7C9; --line-soft:#E0E3D8;
     --r1:#2C5F5A; --r2:#3E8F6C; --r3:#8FB84E; --r4:#EEC245; --r5:#E4813A;
     --accent:#3E8F6C; --accent-deep:#1E5A44;
   }
@@ -29,7 +25,6 @@
   a{color:inherit}
   .wrap{max-width:1080px;margin:0 auto;padding:0 32px}
 
-  /* top bar */
   header.bar{position:sticky;top:0;z-index:50;
     background:color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
@@ -42,7 +37,6 @@
   .bar-cta:hover{background:var(--accent-deep)}
   @media(max-width:640px){.bar-right .mono{display:none}}
 
-  /* hero */
   .hero{padding:76px 0 60px}
   .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;
@@ -69,19 +63,16 @@
   @media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:36px}
     .map-panel{order:2;max-width:420px}}
 
-  /* section scaffolding */
   section.block{padding:56px 0;border-top:1px solid var(--line)}
   .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:30px}
   .sec-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.08em}
   .sec-title{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(22px,3vw,30px);letter-spacing:-.01em}
 
-  /* interest */
   .fit-lede{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(21px,2.7vw,29px);
     line-height:1.42;letter-spacing:-.01em;max-width:22ch}
   .fit-body{margin-top:20px;color:var(--ink-soft);max-width:64ch}
   .fit-body strong{color:var(--ink);font-weight:600}
 
-  /* requirement meters */
   .req-note{font-size:14.5px;color:var(--ink-soft);max-width:62ch;margin-bottom:28px}
   .req{display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:center;
     padding:15px 0;border-bottom:1px solid var(--line-soft)}
@@ -93,13 +84,13 @@
   .cell{width:26px;height:12px;border-radius:2px;background:var(--line);transition:background .5s ease}
   @media(max-width:520px){.cell{width:20px}}
 
-  /* résumé entries */
   .entry{display:grid;grid-template-columns:190px 1fr;gap:26px;
     padding:24px 0;border-bottom:1px solid var(--line-soft)}
   .entry:last-child{border-bottom:none}
   .entry-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);
     line-height:1.7;padding-top:4px}
   .entry-meta .loc{display:block;color:var(--ink-faint);opacity:.85}
+  .entry-meta .mono-cat{color:var(--accent-deep);opacity:1}
   .entry-body h3{font-family:'Fraunces',serif;font-weight:500;font-size:19px;margin-bottom:2px}
   .entry-org{font-size:14px;color:var(--accent-deep);font-weight:500;margin-bottom:12px}
   .entry-body ul{list-style:none;display:grid;gap:8px}
@@ -111,7 +102,18 @@
   .cw span{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em}
   @media(max-width:640px){.entry{grid-template-columns:1fr;gap:8px}}
 
-  /* skills */
+  /* project entries */
+  .pdesc{font-size:14.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:10px;max-width:66ch}
+  .ptags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .ptags span{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--paper);
+    border:1px solid var(--line);border-radius:20px;padding:2px 10px;color:var(--ink-soft);letter-spacing:.02em}
+  .prow{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .prel{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--accent-deep);letter-spacing:.01em;max-width:54ch;line-height:1.5}
+  .prel::before{content:"\2192  ";color:var(--ink-faint)}
+  .plink{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink);text-decoration:none;
+    border-bottom:1px solid var(--line);padding-bottom:1px;transition:color .18s,border-color .18s;white-space:nowrap}
+  .plink:hover{color:var(--accent);border-color:var(--accent)}
+
   .skills{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
   .skill-row{display:grid;grid-template-columns:210px 1fr;gap:18px;background:var(--paper-2);padding:16px 22px;align-items:baseline}
   .skill-k{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.05em;
@@ -120,7 +122,6 @@
   .skill-v b{color:var(--ink);font-weight:600}
   @media(max-width:640px){.skill-row{grid-template-columns:1fr;gap:6px}}
 
-  /* awards inline */
   .awards{display:grid;gap:14px;margin-top:4px}
   .award{display:grid;grid-template-columns:190px 1fr;gap:26px}
   .award .k{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);padding-top:2px}
@@ -128,7 +129,6 @@
   .award .v b{color:var(--ink);font-weight:600}
   @media(max-width:640px){.award{grid-template-columns:1fr;gap:4px}}
 
-  /* phase */
   .phase{background:var(--ink);color:var(--paper);border-radius:5px;padding:40px 40px}
   .phase .sec-num{color:var(--r4)}
   .phase h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(22px,3vw,28px);
@@ -141,7 +141,6 @@
     padding-top:3px;white-space:nowrap;letter-spacing:.03em}
   @media(max-width:600px){.phase{padding:30px 24px}}
 
-  /* contact */
   .contact{padding:64px 0 30px;border-top:1px solid var(--line)}
   .contact h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,4vw,40px);
     letter-spacing:-.02em;margin-bottom:10px}
@@ -215,7 +214,7 @@
         <span class="sec-title">Why this role</span>
       </div>
       <p class="fit-lede reveal">Status &amp; Trends is the clearest example I know of research turned into something conservation can actually use.</p>
-      <p class="fit-body reveal">Two billion observations, modelled across the full annual cycle, made downloadable and legible for the people making decisions — that intersection of <strong>large-scale data engineering, geospatial rigor, and honest visualization</strong> is exactly what I chose to build my degree and my consulting around, from environmental time-series work to the AMII AI for Earth research. I'm not looking for a generic data role that happens to be open. I want to spend this year on <strong>this</strong> problem, with the team that set the standard for it. I'd be genuinely glad to be considered, and I'd come in ready to contribute quickly and learn the parts I don't yet know.</p>
+      <p class="fit-body reveal">Two billion observations, modelled across the full annual cycle, made downloadable and legible for the people making decisions — that intersection of <strong>large-scale data engineering, geospatial rigor, and honest visualization</strong> is exactly what I chose to build my degree and my consulting around, from environmental time-series to satellite-based crop-yield modelling and the AMII AI for Earth research. I'm not looking for a generic data role that happens to be open. I want to spend this year on <strong>this</strong> problem, with the team that set the standard for it. I'd be genuinely glad to be considered, and I'd come in ready to contribute quickly and learn the parts I don't yet know.</p>
     </div>
   </section>
 
@@ -233,7 +232,7 @@
           <div class="meter"></div>
         </div>
         <div class="req" data-level="5">
-          <div class="req-label">Reproducible analytical workflows<span class="req-sub">required · Quarto, R Markdown, documented handoffs</span></div>
+          <div class="req-label">Reproducible analytical workflows<span class="req-sub">required · Quarto, R Markdown, Docker, pytest</span></div>
           <div class="meter"></div>
         </div>
         <div class="req" data-level="5">
@@ -241,11 +240,11 @@
           <div class="meter"></div>
         </div>
         <div class="req" data-level="4">
-          <div class="req-label">Large, complex datasets at scale<span class="req-sub">required · AWS batch, large-scale scientific pipelines</span></div>
+          <div class="req-label">Large, complex datasets at scale<span class="req-sub">required · ~960k-record classification, AWS batch pipelines</span></div>
           <div class="meter"></div>
         </div>
         <div class="req" data-level="4">
-          <div class="req-label">Geospatial — vector data<span class="req-sub">required · GeoPandas, spatial joins, GDAL</span></div>
+          <div class="req-label">Geospatial — vector data<span class="req-sub">required · GeoPandas, spatial joins, hex-bin, GDAL</span></div>
           <div class="meter"></div>
         </div>
         <div class="req" data-level="4">
@@ -257,7 +256,7 @@
           <div class="meter"></div>
         </div>
         <div class="req" data-level="3">
-          <div class="req-label">Geospatial — raster &amp; remote sensing<span class="req-sub">required · developing — solid GDAL base, deepening on covariates</span></div>
+          <div class="req-label">Geospatial — raster &amp; remote sensing<span class="req-sub">required · developing — satellite ML (ViT) + GDAL base, deepening on covariates</span></div>
           <div class="meter"></div>
         </div>
         <div class="req" data-level="3">
@@ -307,9 +306,9 @@
       </div>
 
       <div class="entry reveal">
-        <div class="entry-meta">Jan 2024 — Jun 2024<span class="loc">Remote</span></div>
+        <div class="entry-meta">2024<span class="loc">Gurugram, India</span></div>
         <div class="entry-body">
-          <h3>Data Scientist</h3>
+          <h3>Data Analyst Intern</h3>
           <div class="entry-org">Spartan Poker</div>
           <ul>
             <li>Built ETL workflows and reporting dashboards, communicating findings to non-technical stakeholders.</li>
@@ -319,11 +318,86 @@
     </div>
   </section>
 
+  <!-- SELECTED PROJECTS -->
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">04</span>
+        <span class="sec-title">Selected projects</span>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">2025<span class="loc mono-cat">Remote sensing · ViT</span></div>
+        <div class="entry-body">
+          <h3>Crop-yield forecasting from satellite &amp; weather</h3>
+          <p class="pdesc">Reimplemented MMST-ViT for satellite–weather fusion; stress-tested across heatwave, drought and extreme-rainfall partitions, then retrained with climate augmentation to control RMSE degradation under distribution shift.</p>
+          <div class="ptags"><span>Vision Transformer</span><span>PyTorch</span><span>Satellite</span><span>Climate</span></div>
+          <div class="prow">
+            <span class="prel">Closest analogue to preparing remote-sensing covariates for the Status &amp; Trends models</span>
+            <a class="plink" href="https://github.com/ojasvissar/yield-forecasting-transformer" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">2026<span class="loc mono-cat">Dashboard · Data viz</span></div>
+        <div class="entry-body">
+          <h3>DisasterDash — global disaster analytics</h3>
+          <p class="pdesc">Interactive Plotly Dash application over EM-DAT disaster records, visualizing event types, geographies and time for researchers and policymakers, backed by a fully reproducible preprocessing pipeline.</p>
+          <div class="ptags"><span>Plotly Dash</span><span>EM-DAT</span><span>Python</span><span>UBC MDS</span></div>
+          <div class="prow">
+            <span class="prel">A working version of the dashboard + reproducible-pipeline deliverable this role asks for</span>
+            <a class="plink" href="https://github.com/UBC-MDS/DSCI-532_2026_18_disasterdash" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">Dec 2025<span class="loc mono-cat">Time-series · Reproducible</span></div>
+        <div class="entry-body">
+          <h3>Global land-temperature forecasting</h3>
+          <p class="pdesc">Benchmarked OLS, Random Forest and kernel SVR on the 222-year Berkeley Earth record (RMSE / MAE / R²); containerized with Docker, validated with pytest, delivered as a reproducible Quarto report.</p>
+          <div class="ptags"><span>SVR</span><span>Random Forest</span><span>Docker</span><span>pytest</span><span>Quarto</span></div>
+          <div class="prow">
+            <span class="prel">The reproducibility discipline — Docker, tests, Quarto — that Phase 1 expects</span>
+            <a class="plink" href="https://github.com/kessler24/predicting_daily_land_average_earth_temperature" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">2024<span class="loc mono-cat">Geospatial · EDA</span></div>
+        <div class="entry-body">
+          <h3>NYC geospatial pricing analysis</h3>
+          <p class="pdesc">EDA over 50,000+ NYC listings from open data, with choropleth and hex-bin geospatial visualizations surfacing borough-level disparities, plus OLS and feature-importance analysis of the main drivers.</p>
+          <div class="ptags"><span>GeoPandas</span><span>Folium</span><span>Hex-bin</span><span>OLS</span></div>
+          <div class="prow">
+            <span class="prel">Vector geospatial and hex-bin mapping — the coverage-analysis toolkit for abundance products</span>
+            <a class="plink" href="https://github.com/ojasvissar/New-York-AIRBNB-Analysis" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">Nov 2025<span class="loc mono-cat">Classification · Scale</span></div>
+        <div class="entry-body">
+          <h3>Hazard classification on ~960k NASA/JPL records</h3>
+          <p class="pdesc">Binary hazard classifier over 958,524 NASA/JPL asteroid records, handling severe class imbalance with RFE and SMOTENC, using XGBoost and Random Forest ensembles with feature-importance interpretation.</p>
+          <div class="ptags"><span>XGBoost</span><span>SMOTENC</span><span>RFE</span><span>NASA/JPL</span></div>
+          <div class="prow">
+            <span class="prel">Evidence I can work cleanly at the data scale Status &amp; Trends operates on</span>
+            <a class="plink" href="https://github.com/ojasvissar/asteroid-hazard-classification" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- EDUCATION -->
   <section class="block" id="education">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="sec-num">04</span>
+        <span class="sec-num">05</span>
         <span class="sec-title">Education</span>
       </div>
 
@@ -350,35 +424,39 @@
   <section class="block" id="skills">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="sec-num">05</span>
+        <span class="sec-num">06</span>
         <span class="sec-title">Technical skills</span>
       </div>
       <div class="skills reveal">
         <div class="skill-row"><div class="skill-k">Languages &amp; Tools</div><div class="skill-v"><b>Python</b>, <b>R</b>, SQL, Bash, Git, Docker</div></div>
-        <div class="skill-row"><div class="skill-k">Pipelines &amp; Analysis</div><div class="skill-v">pandas, NumPy, scikit-learn, tidyverse, ggplot2, <b>Quarto</b>, R Markdown, ETL</div></div>
-        <div class="skill-row"><div class="skill-k">Geospatial</div><div class="skill-v"><b>GeoPandas</b>, GDAL, OSMnx, Folium, spatial joins, choropleth &amp; hex-bin mapping</div></div>
+        <div class="skill-row"><div class="skill-k">Pipelines &amp; Analysis</div><div class="skill-v">pandas, NumPy, scikit-learn, tidyverse, ggplot2, <b>Quarto</b>, R Markdown, pytest, ETL</div></div>
+        <div class="skill-row"><div class="skill-k">Geospatial</div><div class="skill-v"><b>GeoPandas</b>, GDAL, Folium, spatial joins, choropleth &amp; hex-bin mapping</div></div>
         <div class="skill-row"><div class="skill-k">Visualization</div><div class="skill-v"><b>Plotly Dash</b>, <b>Shiny</b> (Python &amp; R), Streamlit, Matplotlib, Seaborn</div></div>
-        <div class="skill-row"><div class="skill-k">Modelling</div><div class="skill-v">ARIMA/SARIMA, XGBoost, Random Forest, LSTM, SVR, BERT/RoBERTa</div></div>
+        <div class="skill-row"><div class="skill-k">Modelling</div><div class="skill-v">ARIMA/SARIMA, XGBoost, Random Forest, LSTM, SVR, <b>satellite–weather fusion (Vision Transformers)</b></div></div>
         <div class="skill-row"><div class="skill-k">Cloud &amp; HPC</div><div class="skill-v">AWS (Lambda, S3, EC2, EventBridge, Bedrock), Docker, SLURM</div></div>
       </div>
     </div>
   </section>
 
-  <!-- PUBLICATIONS & AWARDS -->
+  <!-- PUBLICATIONS & RECOGNITION -->
   <section class="block" id="recognition">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="sec-num">06</span>
-        <span class="sec-title">Publications &amp; awards</span>
+        <span class="sec-num">07</span>
+        <span class="sec-title">Publications &amp; recognition</span>
       </div>
       <div class="awards reveal">
         <div class="award">
           <div class="k">Publication · 2026</div>
-          <div class="v">Peer-reviewed paper in <b>Springer LNNS</b> (ICICC 2026).</div>
+          <div class="v">Peer-reviewed paper, <b>ICICC 2026</b> — Springer Lecture Notes in Networks and Systems (LNNS).</div>
         </div>
         <div class="award">
           <div class="k">Award</div>
           <div class="v"><b>AMII AI for Earth Scholarship</b> — Alberta Machine Intelligence Institute, for applying machine learning to environmental and ecological problems.</div>
+        </div>
+        <div class="award">
+          <div class="k">Writing</div>
+          <div class="v">Published essay on <b>machine learning applied to climate data</b> — on predicting environmental trends and what the models actually tell us.</div>
         </div>
       </div>
     </div>
@@ -388,12 +466,12 @@
   <section class="block" id="phase">
     <div class="wrap">
       <div class="phase reveal">
-        <div class="sec-head" style="margin-bottom:18px"><span class="sec-num">07</span></div>
+        <div class="sec-head" style="margin-bottom:18px"><span class="sec-num">08</span></div>
         <h2>What my first four months would look like</h2>
         <p>Reading the posting's own Phase 1, here's how I'd spend onboarding — so the ramp-up areas above become strengths, not open questions.</p>
         <ul>
           <li><span class="k">weeks 1–3</span><span>Work through the <strong>ebirdst</strong> package and Status &amp; Trends vignettes end to end; reproduce an abundance and a trend product for one species to learn the data model hands-on.</span></li>
-          <li><span class="k">weeks 4–8</span><span>Map existing workflows and computing resources; deepen on <strong>raster covariate</strong> preparation from remote-sensing inputs, the clearest gap between my base and the role.</span></li>
+          <li><span class="k">weeks 4–8</span><span>Map existing workflows and computing resources; deepen on <strong>raster covariate</strong> preparation from remote-sensing inputs, building on my satellite-ML work.</span></li>
           <li><span class="k">weeks 9–16</span><span>Take on priority data requests and exploratory analyses; establish reproducible processing workflows and document the foundations, as Phase 1 asks.</span></li>
         </ul>
       </div>
@@ -407,9 +485,8 @@
       <p class="sub">Happy to walk through any of the above, share the tailored résumé, or reproduce a Status &amp; Trends product live so you can see exactly how I work. Available for a September 2026 start.</p>
       <div class="links">
         <a class="lnk primary" href="mailto:ojasvissar4@gmail.com?subject=Biological%20Data%20Scientist%20—%20eBird%20Status%20%26%20Trends"><span class="arw">&#10022;</span> ojasvissar4@gmail.com</a>
-        <a class="lnk" href="https://ojasvissar.github.io/og/" target="_blank" rel="noopener"><span class="arw">&#8594;</span> Portfolio</a>
-        <a class="lnk" href="https://github.com/Ojasv-Issar" target="_blank" rel="noopener"><span class="arw">&#8594;</span> GitHub</a>
-        <a class="lnk" href="https://www.linkedin.com/in/ojasvissar/" target="_blank" rel="noopener"><span class="arw">&#8594;</span> LinkedIn</a>
+        <a class="lnk" href="https://ojasvissar.github.io/resume-website/" target="_blank" rel="noopener"><span class="arw">&#8594;</span> Résumé</a>
+        <a class="lnk" href="https://github.com/ojasvissar" target="_blank" rel="noopener"><span class="arw">&#8594;</span> GitHub</a>
       </div>
     </div>
   </section>
