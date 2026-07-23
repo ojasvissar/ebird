@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ojasv Issar — Biological Data Scientist · eBird Status &amp; Trends</title>
+<meta name="description" content="Application for the Biological Data Scientist contract with the Center for Avian Population Studies, Cornell Lab of Ornithology — eBird Status and Trends.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFF0E9;
+    --paper-2:#F5F5EF;
+    --ink:#15231B;
+    --ink-soft:#4B5A50;
+    --ink-faint:#7A867C;
+    --line:#D3D7C9;
+    --line-soft:#E0E3D8;
+    --r1:#2C5F5A; --r2:#3E8F6C; --r3:#8FB84E; --r4:#EEC245; --r5:#E4813A;
+    --accent:#3E8F6C; --accent-deep:#1E5A44;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--r4);color:var(--ink)}
+  .mono{font-family:'IBM Plex Mono',monospace;font-weight:400}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+
+  /* top bar */
+  header.bar{position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .bar-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .bar-name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;letter-spacing:-.01em}
+  .bar-right{display:flex;align-items:center;gap:22px}
+  .bar-right .mono{font-size:12.5px;color:var(--ink-soft);letter-spacing:.02em}
+  .bar-cta{font-family:'IBM Plex Mono',monospace;font-size:12.5px;text-decoration:none;
+    color:var(--paper-2);background:var(--ink);padding:8px 14px;border-radius:2px;transition:background .18s ease}
+  .bar-cta:hover{background:var(--accent-deep)}
+  @media(max-width:640px){.bar-right .mono{display:none}}
+
+  /* hero */
+  .hero{padding:76px 0 60px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent-deep);margin-bottom:22px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .eyebrow .tick{width:26px;height:8px;border-radius:2px;
+    background:linear-gradient(90deg,var(--r1),var(--r2),var(--r3),var(--r4),var(--r5))}
+  h1.hero-title{font-family:'Fraunces',serif;font-weight:500;
+    font-size:clamp(34px,5.2vw,56px);line-height:1.04;letter-spacing:-.02em;margin-bottom:24px}
+  h1.hero-title em{font-style:italic;color:var(--accent-deep)}
+  .hero-lede{font-size:18px;color:var(--ink-soft);max-width:36ch;margin-bottom:28px}
+  .hero-meta{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-faint);
+    display:flex;gap:18px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+  .hero-meta span{white-space:nowrap}
+
+  .map-panel{background:var(--paper-2);border:1px solid var(--line);border-radius:4px;
+    padding:16px 16px 12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .map-panel svg{width:100%;height:auto;display:block}
+  .map-caption{display:flex;align-items:center;justify-content:space-between;margin-top:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-faint);letter-spacing:.03em}
+  .legend{display:flex;align-items:center;gap:6px}
+  .legend-ramp{width:64px;height:8px;border-radius:2px;
+    background:linear-gradient(90deg,var(--r1),var(--r2),var(--r3),var(--r4),var(--r5))}
+  @media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:36px}
+    .map-panel{order:2;max-width:420px}}
+
+  /* section scaffolding */
+  section.block{padding:56px 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:30px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.08em}
+  .sec-title{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(22px,3vw,30px);letter-spacing:-.01em}
+
+  /* interest */
+  .fit-lede{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(21px,2.7vw,29px);
+    line-height:1.42;letter-spacing:-.01em;max-width:22ch}
+  .fit-body{margin-top:20px;color:var(--ink-soft);max-width:64ch}
+  .fit-body strong{color:var(--ink);font-weight:600}
+
+  /* requirement meters */
+  .req-note{font-size:14.5px;color:var(--ink-soft);max-width:62ch;margin-bottom:28px}
+  .req{display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:center;
+    padding:15px 0;border-bottom:1px solid var(--line-soft)}
+  .req:last-child{border-bottom:none}
+  .req-label{font-size:15.5px}
+  .req-label .req-sub{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    color:var(--ink-faint);margin-top:3px;letter-spacing:.02em}
+  .meter{display:flex;gap:5px}
+  .cell{width:26px;height:12px;border-radius:2px;background:var(--line);transition:background .5s ease}
+  @media(max-width:520px){.cell{width:20px}}
+
+  /* résumé entries */
+  .entry{display:grid;grid-template-columns:190px 1fr;gap:26px;
+    padding:24px 0;border-bottom:1px solid var(--line-soft)}
+  .entry:last-child{border-bottom:none}
+  .entry-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);
+    line-height:1.7;padding-top:4px}
+  .entry-meta .loc{display:block;color:var(--ink-faint);opacity:.85}
+  .entry-body h3{font-family:'Fraunces',serif;font-weight:500;font-size:19px;margin-bottom:2px}
+  .entry-org{font-size:14px;color:var(--accent-deep);font-weight:500;margin-bottom:12px}
+  .entry-body ul{list-style:none;display:grid;gap:8px}
+  .entry-body li{position:relative;padding-left:18px;font-size:14.5px;color:var(--ink-soft);line-height:1.5}
+  .entry-body li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;
+    border-radius:1px;background:var(--r3)}
+  .entry-body li strong{color:var(--ink);font-weight:600}
+  .cw{font-size:13.5px;color:var(--ink-soft);margin-top:4px}
+  .cw span{color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em}
+  @media(max-width:640px){.entry{grid-template-columns:1fr;gap:8px}}
+
+  /* skills */
+  .skills{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .skill-row{display:grid;grid-template-columns:210px 1fr;gap:18px;background:var(--paper-2);padding:16px 22px;align-items:baseline}
+  .skill-k{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--accent-deep)}
+  .skill-v{font-size:14.5px;color:var(--ink-soft)}
+  .skill-v b{color:var(--ink);font-weight:600}
+  @media(max-width:640px){.skill-row{grid-template-columns:1fr;gap:6px}}
+
+  /* awards inline */
+  .awards{display:grid;gap:14px;margin-top:4px}
+  .award{display:grid;grid-template-columns:190px 1fr;gap:26px}
+  .award .k{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);padding-top:2px}
+  .award .v{font-size:15px;color:var(--ink-soft)}
+  .award .v b{color:var(--ink);font-weight:600}
+  @media(max-width:640px){.award{grid-template-columns:1fr;gap:4px}}
+
+  /* phase */
+  .phase{background:var(--ink);color:var(--paper);border-radius:5px;padding:40px 40px}
+  .phase .sec-num{color:var(--r4)}
+  .phase h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(22px,3vw,28px);
+    margin-bottom:14px;letter-spacing:-.01em}
+  .phase p{color:#C7D0C8;max-width:64ch;font-size:15.5px}
+  .phase p strong{color:var(--paper);font-weight:600}
+  .phase ul{list-style:none;margin-top:22px;display:grid;gap:12px}
+  .phase li{display:grid;grid-template-columns:auto 1fr;gap:14px;font-size:15px;color:#C7D0C8}
+  .phase li .k{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--r4);
+    padding-top:3px;white-space:nowrap;letter-spacing:.03em}
+  @media(max-width:600px){.phase{padding:30px 24px}}
+
+  /* contact */
+  .contact{padding:64px 0 30px;border-top:1px solid var(--line)}
+  .contact h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,4vw,40px);
+    letter-spacing:-.02em;margin-bottom:10px}
+  .contact .sub{color:var(--ink-soft);margin-bottom:30px;max-width:56ch}
+  .links{display:flex;flex-wrap:wrap;gap:14px}
+  .lnk{font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;
+    border:1px solid var(--line);border-radius:3px;padding:11px 16px;color:var(--ink);
+    display:flex;align-items:center;gap:9px;transition:border-color .18s ease,background .18s ease}
+  .lnk:hover{border-color:var(--accent);background:var(--paper-2)}
+  .lnk .arw{color:var(--accent);font-size:12px}
+  .lnk.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .lnk.primary:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+  .lnk.primary .arw{color:var(--r4)}
+
+  footer.foot{padding:30px 0 60px;border-top:1px solid var(--line);margin-top:40px}
+  .foot-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-faint);letter-spacing:.02em}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}.cell{transition:none}html{scroll-behavior:auto}}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-inner">
+    <div class="bar-name">Ojasv Issar</div>
+    <nav class="bar-right">
+      <span class="mono">Available Sept 2026 · Remote</span>
+      <a class="bar-cta" href="#contact">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text reveal in">
+        <div class="eyebrow">
+          <span class="tick"></span>
+          Contract · Biological Data Scientist · eBird Status &amp; Trends
+        </div>
+        <h1 class="hero-title">This is the work I've been aiming at — and I'd <em>really</em> like to do it here.</h1>
+        <p class="hero-lede">A data scientist for the Center for Avian Population Studies: reproducible geospatial workflows, honest visualization, and analysis at scale — turning billions of observations into products conservation can use.</p>
+        <div class="hero-meta">
+          <span>R + Python</span>
+          <span>MSc Data Science, UBC · 2026</span>
+          <span>3.5 yrs applied</span>
+          <span>Available Sept 2026</span>
+        </div>
+      </div>
+      <div class="map-panel reveal in" aria-hidden="true">
+        <svg id="abmap" viewBox="0 0 340 240" role="img"></svg>
+        <div class="map-caption">
+          <span>fig. 1 — relative abundance (illustrative)</span>
+          <span class="legend">low <span class="legend-ramp"></span> high</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTEREST -->
+  <section class="block" id="interest">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">01</span>
+        <span class="sec-title">Why this role</span>
+      </div>
+      <p class="fit-lede reveal">Status &amp; Trends is the clearest example I know of research turned into something conservation can actually use.</p>
+      <p class="fit-body reveal">Two billion observations, modelled across the full annual cycle, made downloadable and legible for the people making decisions — that intersection of <strong>large-scale data engineering, geospatial rigor, and honest visualization</strong> is exactly what I chose to build my degree and my consulting around, from environmental time-series work to the AMII AI for Earth research. I'm not looking for a generic data role that happens to be open. I want to spend this year on <strong>this</strong> problem, with the team that set the standard for it. I'd be genuinely glad to be considered, and I'd come in ready to contribute quickly and learn the parts I don't yet know.</p>
+    </div>
+  </section>
+
+  <!-- REQUIREMENT MATCH -->
+  <section class="block" id="match">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">02</span>
+        <span class="sec-title">Fit against the posting</span>
+      </div>
+      <p class="req-note reveal">Mapped to the job's own requirements, using the Status &amp; Trends abundance ramp as the meter. Calibrated honestly — the lighter bars are where I'd lean on onboarding, and I'd rather you know that up front.</p>
+      <div class="reveal" id="reqlist">
+        <div class="req" data-level="5">
+          <div class="req-label">R and/or Python proficiency<span class="req-sub">required · both, day one</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="5">
+          <div class="req-label">Reproducible analytical workflows<span class="req-sub">required · Quarto, R Markdown, documented handoffs</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="5">
+          <div class="req-label">Data visualization &amp; scientific communication<span class="req-sub">preferred · Dash, Shiny, Streamlit, ggplot2</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="4">
+          <div class="req-label">Large, complex datasets at scale<span class="req-sub">required · AWS batch, large-scale scientific pipelines</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="4">
+          <div class="req-label">Geospatial — vector data<span class="req-sub">required · GeoPandas, spatial joins, GDAL</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="4">
+          <div class="req-label">Version control, code review, testing<span class="req-sub">required · Git, CI/CD, collaborative software dev</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="4">
+          <div class="req-label">Automating recurring data requests<span class="req-sub">preferred · scheduled AWS Lambda / EventBridge</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="3">
+          <div class="req-label">Geospatial — raster &amp; remote sensing<span class="req-sub">required · developing — solid GDAL base, deepening on covariates</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="3">
+          <div class="req-label">Linux &amp; high-performance computing<span class="req-sub">preferred · SLURM coursework, scaling into production HPC</span></div>
+          <div class="meter"></div>
+        </div>
+        <div class="req" data-level="2">
+          <div class="req-label">eBird / Status &amp; Trends data products<span class="req-sub">preferred · ramping via ebirdst — Phase 1 onboarding</span></div>
+          <div class="meter"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">03</span>
+        <span class="sec-title">Experience</span>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">Jan 2022 — Present<span class="loc">Remote</span></div>
+        <div class="entry-body">
+          <h3>Data Scientist / Research Developer</h3>
+          <div class="entry-org">Independent Consultant</div>
+          <ul>
+            <li>Designed and delivered <strong>30+ end-to-end data pipelines</strong> across environmental science, NLP and finance — ingestion, cleaning, modelling and visualization, each with documented handoff protocols for the next researcher.</li>
+            <li>Built interactive <strong>Plotly Dash and Shiny dashboards</strong> for non-technical and policy-facing stakeholders.</li>
+            <li>Applied <strong>time-series methods (ARIMA, SARIMA, LSTM)</strong> to environmental datasets including daily global land-temperature records; containerized with Docker, delivered as reproducible Quarto reports.</li>
+            <li>Engineered <strong>automated AWS pipelines (Lambda, S3, EventBridge)</strong> for scheduled collection, cleaning and analysis — the architecture for turning recurring data requests into maintained products.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">Sep 2025 — 2026<span class="loc">Vancouver, BC</span></div>
+        <div class="entry-body">
+          <h3>Graduate Teaching Assistant</h3>
+          <div class="entry-org">University of British Columbia — Master of Data Science</div>
+          <ul>
+            <li>CBTF proctor scaling operations from <strong>22 to 31 courses (+41%)</strong> and <strong>4,298 to 6,094 students (+42%)</strong> in a single term.</li>
+            <li>Maintained secure, reliable delivery across <strong>38,000+ exams</strong>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">Jan 2024 — Jun 2024<span class="loc">Remote</span></div>
+        <div class="entry-body">
+          <h3>Data Scientist</h3>
+          <div class="entry-org">Spartan Poker</div>
+          <ul>
+            <li>Built ETL workflows and reporting dashboards, communicating findings to non-technical stakeholders.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="block" id="education">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">04</span>
+        <span class="sec-title">Education</span>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">2025 — 2026<span class="loc">Vancouver, BC</span></div>
+        <div class="entry-body">
+          <h3>Master of Data Science <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent-deep);letter-spacing:.03em">· completed</span></h3>
+          <div class="entry-org">University of British Columbia</div>
+          <p class="cw"><span>Relevant coursework —</span> Geospatial Analysis · Statistical Inference · Bayesian Inference · Machine Learning · Deep Learning · Databases &amp; Data Retrieval · Collaborative Software Development · Reproducible Workflows</p>
+        </div>
+      </div>
+
+      <div class="entry reveal">
+        <div class="entry-meta">2020 — 2024<span class="loc">Pune, India</span></div>
+        <div class="entry-body">
+          <h3>B.Tech, Computer Science &amp; Engineering</h3>
+          <div class="entry-org">Symbiosis Institute of Technology — Honours: Data Science</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">05</span>
+        <span class="sec-title">Technical skills</span>
+      </div>
+      <div class="skills reveal">
+        <div class="skill-row"><div class="skill-k">Languages &amp; Tools</div><div class="skill-v"><b>Python</b>, <b>R</b>, SQL, Bash, Git, Docker</div></div>
+        <div class="skill-row"><div class="skill-k">Pipelines &amp; Analysis</div><div class="skill-v">pandas, NumPy, scikit-learn, tidyverse, ggplot2, <b>Quarto</b>, R Markdown, ETL</div></div>
+        <div class="skill-row"><div class="skill-k">Geospatial</div><div class="skill-v"><b>GeoPandas</b>, GDAL, OSMnx, Folium, spatial joins, choropleth &amp; hex-bin mapping</div></div>
+        <div class="skill-row"><div class="skill-k">Visualization</div><div class="skill-v"><b>Plotly Dash</b>, <b>Shiny</b> (Python &amp; R), Streamlit, Matplotlib, Seaborn</div></div>
+        <div class="skill-row"><div class="skill-k">Modelling</div><div class="skill-v">ARIMA/SARIMA, XGBoost, Random Forest, LSTM, SVR, BERT/RoBERTa</div></div>
+        <div class="skill-row"><div class="skill-k">Cloud &amp; HPC</div><div class="skill-v">AWS (Lambda, S3, EC2, EventBridge, Bedrock), Docker, SLURM</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS & AWARDS -->
+  <section class="block" id="recognition">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">06</span>
+        <span class="sec-title">Publications &amp; awards</span>
+      </div>
+      <div class="awards reveal">
+        <div class="award">
+          <div class="k">Publication · 2026</div>
+          <div class="v">Peer-reviewed paper in <b>Springer LNNS</b> (ICICC 2026).</div>
+        </div>
+        <div class="award">
+          <div class="k">Award</div>
+          <div class="v"><b>AMII AI for Earth Scholarship</b> — Alberta Machine Intelligence Institute, for applying machine learning to environmental and ecological problems.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE NOTE -->
+  <section class="block" id="phase">
+    <div class="wrap">
+      <div class="phase reveal">
+        <div class="sec-head" style="margin-bottom:18px"><span class="sec-num">07</span></div>
+        <h2>What my first four months would look like</h2>
+        <p>Reading the posting's own Phase 1, here's how I'd spend onboarding — so the ramp-up areas above become strengths, not open questions.</p>
+        <ul>
+          <li><span class="k">weeks 1–3</span><span>Work through the <strong>ebirdst</strong> package and Status &amp; Trends vignettes end to end; reproduce an abundance and a trend product for one species to learn the data model hands-on.</span></li>
+          <li><span class="k">weeks 4–8</span><span>Map existing workflows and computing resources; deepen on <strong>raster covariate</strong> preparation from remote-sensing inputs, the clearest gap between my base and the role.</span></li>
+          <li><span class="k">weeks 9–16</span><span>Take on priority data requests and exploratory analyses; establish reproducible processing workflows and document the foundations, as Phase 1 asks.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <h2>I'd love to be considered.</h2>
+      <p class="sub">Happy to walk through any of the above, share the tailored résumé, or reproduce a Status &amp; Trends product live so you can see exactly how I work. Available for a September 2026 start.</p>
+      <div class="links">
+        <a class="lnk primary" href="mailto:ojasvissar4@gmail.com?subject=Biological%20Data%20Scientist%20—%20eBird%20Status%20%26%20Trends"><span class="arw">&#10022;</span> ojasvissar4@gmail.com</a>
+        <a class="lnk" href="https://ojasvissar.github.io/og/" target="_blank" rel="noopener"><span class="arw">&#8594;</span> Portfolio</a>
+        <a class="lnk" href="https://github.com/Ojasv-Issar" target="_blank" rel="noopener"><span class="arw">&#8594;</span> GitHub</a>
+        <a class="lnk" href="https://www.linkedin.com/in/ojasvissar/" target="_blank" rel="noopener"><span class="arw">&#8594;</span> LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <span>Ojasv Issar · Prepared for the Center for Avian Population Studies</span>
+      <span>Cornell Lab of Ornithology · eBird Status &amp; Trends</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var svg=document.getElementById('abmap');
+  var W=340,H=240,cols=34,rows=24,gap=1.5;
+  var cw=(W-(cols-1)*gap)/cols, ch=(H-(rows-1)*gap)/rows;
+  var ramp=['#2C5F5A','#3E8F6C','#8FB84E','#EEC245','#E4813A'];
+  function hex2rgb(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+  function rgb2hex(a){return '#'+a.map(function(v){v=Math.max(0,Math.min(255,Math.round(v)));return ('0'+v.toString(16)).slice(-2);}).join('');}
+  function rampColor(t){
+    if(t<=0)return ramp[0]; if(t>=1)return ramp[ramp.length-1];
+    var s=t*(ramp.length-1),i=Math.floor(s),f=s-i;
+    var a=hex2rgb(ramp[i]),b=hex2rgb(ramp[i+1]);
+    return rgb2hex([a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f,a[2]+(b[2]-a[2])*f]);
+  }
+  var c1={x:0.40,y:0.42,s:0.24},c2={x:0.66,y:0.60,s:0.17};
+  function field(nx,ny){
+    function g(c){var dx=nx-c.x,dy=ny-c.y;return Math.exp(-((dx*dx+dy*dy))/(2*c.s*c.s));}
+    var v=g(c1)*1.0+g(c2)*0.75;
+    v*=(0.82+0.36*Math.sin(nx*9.1)*Math.cos(ny*7.3));
+    return v;
+  }
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var frag=document.createDocumentFragment();
+  for(var r=0;r<rows;r++){
+    for(var c=0;c<cols;c++){
+      var nx=c/(cols-1),ny=r/(rows-1);
+      var v=Math.max(0,Math.min(1,field(nx,ny)));
+      var rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x',(c*(cw+gap)).toFixed(2));
+      rect.setAttribute('y',(r*(ch+gap)).toFixed(2));
+      rect.setAttribute('width',cw.toFixed(2));
+      rect.setAttribute('height',ch.toFixed(2));
+      rect.setAttribute('rx','1');
+      var finalOp;
+      if(v<0.08){rect.setAttribute('fill','#E6E8DE');finalOp='1';}
+      else{rect.setAttribute('fill',rampColor(v));finalOp=(0.35+0.65*v).toFixed(2);rect.setAttribute('opacity',finalOp);}
+      if(!reduce){
+        rect.style.opacity='0';rect.style.transition='opacity .5s ease';
+        var d=(nx*260)+(Math.random()*160);
+        (function(el,op,delay){setTimeout(function(){el.style.opacity=op;},delay);})(rect,finalOp,200+d);
+      }
+      frag.appendChild(rect);
+    }
+  }
+  svg.appendChild(frag);
+
+  document.querySelectorAll('#reqlist .req').forEach(function(req){
+    var lvl=parseInt(req.getAttribute('data-level'),10);
+    var meter=req.querySelector('.meter');
+    for(var i=0;i<5;i++){
+      var cell=document.createElement('span');
+      cell.className='cell';
+      cell.dataset.on=(i<lvl)?'1':'0';
+      cell.dataset.color=ramp[i];
+      meter.appendChild(cell);
+    }
+  });
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        var cells=e.target.querySelectorAll?e.target.querySelectorAll('.cell'):[];
+        cells.forEach(function(cell,i){
+          if(cell.dataset.on==='1'){setTimeout(function(){cell.style.background=cell.dataset.color;},120+i*70);}
+        });
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.14});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
